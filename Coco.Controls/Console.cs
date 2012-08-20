@@ -24,12 +24,14 @@ namespace Coco.Controls
             "Model", typeof(IConsoleModel), typeof(Console), new PropertyMetadata(ConsoleModelChanged));
         public static readonly DependencyProperty DisplayDebugMarkersProperty = DependencyProperty.Register(
             "DisplayDebugMarkers", typeof(bool), typeof(Console));
+        public static readonly DependencyProperty ColorMapProperty = DependencyProperty.Register(
+            "ColorMap", typeof(IConsoleColorMap), typeof(Console));
 
         private RichTextBox _host;
         private TextPointer _inputStart;
         private Shape _inputMarker;
         private Shape _caretMarker;
-        
+
         public IConsoleModel Model
         {
             get { return (IConsoleModel)(GetValue(ModelProperty) ?? ConsoleModel.Null); }
@@ -40,6 +42,12 @@ namespace Coco.Controls
         {
             get { return (bool)(GetValue(DisplayDebugMarkersProperty) ?? false); }
             set { SetValue(DisplayDebugMarkersProperty, value); }
+        }
+
+        public IConsoleColorMap ColorMap
+        {
+            get { return (IConsoleColorMap)(GetValue(ColorMapProperty) ?? ConsoleColorMap.Default); }
+            set { SetValue(ColorMapProperty, value); }
         }
 
         private TextPointer InputStart
@@ -65,7 +73,7 @@ namespace Coco.Controls
             base.OnApplyTemplate();
 
             _host = (RichTextBox)GetTemplateChild("PART_Host");
-            
+
             InputStart = _host.CaretPosition;
             _host.PreviewKeyDown += _host_PreviewKeyDown;
             _host.PreviewTextInput += _host_PreviewTextInput;
@@ -80,8 +88,6 @@ namespace Coco.Controls
 
             PrepDebugReferences();
         }
-
-        
 
         private static void AdjustMarker(Shape marker, TextPointer pointer)
         {
@@ -111,7 +117,6 @@ namespace Coco.Controls
 
         private void _host_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-
             if (e.Key == Key.Enter || e.Key == Key.Return)
             {
                 // Get all the text since the input started
@@ -144,12 +149,29 @@ namespace Coco.Controls
             }
         }
 
-        Task IConsoleHost.Write(string text)
+        private Task Write(FormattedTextRun run)
         {
-            _host.CaretPosition.InsertTextInRun(text);
-            InputStart = _host.CaretPosition.DocumentEnd.GetNextInsertionPosition(LogicalDirection.Backward).GetPositionAtOffset(0, LogicalDirection.Backward);
+            var start = _host.Document.ContentStart.GetOffsetToPosition(_host.CaretPosition);
+            _host.CaretPosition.InsertTextInRun(run.Text);
+
+            var startPos = _host.Document.ContentStart.GetPositionAtOffset(start, LogicalDirection.Forward);
+            var endPos = _host.Document.ContentStart.GetPositionAtOffset(start + run.Text.Length, LogicalDirection.Forward);
+            var range = new TextRange(startPos, endPos);
+            run.Classification.ApplyToRange(range, ColorMap);
+            
+            InputStart = range.End
+                              .GetPositionAtOffset(0, LogicalDirection.Backward);
+
             _host.CaretPosition = InputStart;
             return TaskEx.FromCompleted();
+        }
+
+        async Task IConsoleHost.Write(FormattedText text)
+        {
+            foreach (var run in text.Runs)
+            {
+                await Write(run);
+            }
         }
 
         Task IConsoleHost.InsertLineBreak()
@@ -162,7 +184,8 @@ namespace Coco.Controls
 
         Task IConsoleHost.Clear()
         {
-            _host.Document = new FlowDocument();
+            _host.Document = new FlowDocument(new Paragraph(new Run()));
+            _host.CaretPosition = _host.Document.ContentStart;
             return TaskEx.FromCompleted();
         }
 

@@ -47,6 +47,9 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IConsoleColorMap.cs" />
+    <Compile Include="TextClassification.cs" />
+    <Compile Include="TextClassifications.cs" />
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -59,6 +62,8 @@
   <ItemGroup>
     <Compile Include="ConsoleModel.cs" />
     <Compile Include="ConsoleViewModel.cs" />
+    <Compile Include="FormattedText.cs" />
+    <Compile Include="FormattedTextRun.cs" />
     <Compile Include="IConsoleHost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

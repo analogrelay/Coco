@@ -29,18 +29,18 @@ namespace Coco
             return tcs.Task;
         }
 
-        public static Task<ICollection<PSObject>> InvokeTaskAsync(this Pipeline self)
+        public static Task<Pipeline> InvokeTaskAsync(this Pipeline self)
         {
-            TaskCompletionSource<ICollection<PSObject>> tcs = new TaskCompletionSource<ICollection<PSObject>>();
+            TaskCompletionSource<Pipeline> tcs = new TaskCompletionSource<Pipeline>();
             self.StateChanged += (sender, args) =>
             {
                 if (args.PipelineStateInfo.State == PipelineState.Completed)
                 {
-                    tcs.TrySetResult(self.Output.ReadToEnd());
+                    tcs.TrySetResult(self);
                 }
                 else if (args.PipelineStateInfo.State == PipelineState.Failed)
                 {
-                    tcs.TrySetException(args.PipelineStateInfo.Reason);
+                    tcs.TrySetResult(self);
                 }
                 else if (args.PipelineStateInfo.State == PipelineState.Stopped)
                 {

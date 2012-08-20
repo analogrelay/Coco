@@ -19,7 +19,7 @@ namespace Coco.PowerShell
             _ownerContext = ownerContext;
         }
 
-        public Task Write(string text)
+        public Task Write(FormattedText text)
         {
             return _ownerContext.PostAsync(async () => await _host.Write(text));
         }
