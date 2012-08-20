@@ -12,6 +12,7 @@ namespace Coco.Controls
         public string ClassificationId { get; private set; }
         public ConsoleColor? DefaultForeground { get; private set; }
         public ConsoleColor? DefaultBackground { get; private set; }
+        public virtual bool HasFormat { get { return DefaultForeground != null || DefaultBackground != null; } }
 
         public TextClassification(string id, ConsoleColor? defaultForeground, ConsoleColor? defaultBackground)
         {

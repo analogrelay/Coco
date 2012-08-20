@@ -151,16 +151,17 @@ namespace Coco.Controls
 
         private Task Write(FormattedTextRun run)
         {
+            if (run.Classification.HasFormat)
+            {
+                // TODO: Splitting...manually... grr...
+            }
+
             var start = _host.Document.ContentStart.GetOffsetToPosition(_host.CaretPosition);
             _host.CaretPosition.InsertTextInRun(run.Text);
-
-            var startPos = _host.Document.ContentStart.GetPositionAtOffset(start, LogicalDirection.Forward);
             var endPos = _host.Document.ContentStart.GetPositionAtOffset(start + run.Text.Length, LogicalDirection.Forward);
-            var range = new TextRange(startPos, endPos);
-            run.Classification.ApplyToRange(range, ColorMap);
             
-            InputStart = range.End
-                              .GetPositionAtOffset(0, LogicalDirection.Backward);
+            // Get a copy of the end marker, but with it's LogicalDirection pointing backwards (so it doesn't move with new text)
+            InputStart = endPos.GetPositionAtOffset(0, LogicalDirection.Backward);
 
             _host.CaretPosition = InputStart;
             return TaskEx.FromCompleted();

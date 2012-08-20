@@ -47,7 +47,6 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IConsoleColorMap.cs" />
     <Compile Include="TextClassification.cs" />
     <Compile Include="TextClassifications.cs" />
     <Page Include="Themes\Generic.xaml">
@@ -64,6 +63,7 @@
     <Compile Include="ConsoleViewModel.cs" />
     <Compile Include="FormattedText.cs" />
     <Compile Include="FormattedTextRun.cs" />
+    <Compile Include="IConsoleColorMap.cs" />
     <Compile Include="IConsoleHost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
