@@ -1,0 +1,16 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:coco="clr-namespace:Coco"
+        xmlns:ps1="clr-namespace:Coco.PowerShell"
+        xmlns:Controls="clr-namespace:Coco.Controls;assembly=Coco.Controls" 
+        x:Class="Coco.MainWindow"
+        Title="MainWindow" Height="500" Width="700">
+    <Window.Resources>
+        <ps1:PowerShellConsoleModel x:Key="PowerShellConsoleModel" />
+    </Window.Resources>
+    <Grid>
+        <!-- 214 222 212 -->
+        <Controls:Console Model="{StaticResource PowerShellConsoleModel}" Background="{DynamicResource ConsoleBackgroundBrush}" Foreground="{DynamicResource ConsoleForegroundBrush}" FontFamily="{DynamicResource ConsoleFontFamily}" FontSize="{DynamicResource ConsoleFontSize}"/>
+    </Grid>
+</Window>
