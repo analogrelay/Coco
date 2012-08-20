@@ -28,5 +28,10 @@ namespace Coco.PowerShell
         {
             return _ownerContext.PostAsync(async () => await _host.InsertLineBreak());
         }
+
+        public Task Clear()
+        {
+            return _ownerContext.PostAsync(async () => await _host.Clear());
+        }
     }
 }

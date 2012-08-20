@@ -29,7 +29,7 @@ namespace Coco.Controls
         private TextPointer _inputStart;
         private Shape _inputMarker;
         private Shape _caretMarker;
-
+        
         public IConsoleModel Model
         {
             get { return (IConsoleModel)(GetValue(ModelProperty) ?? ConsoleModel.Null); }
@@ -81,12 +81,14 @@ namespace Coco.Controls
             PrepDebugReferences();
         }
 
+        
+
         private static void AdjustMarker(Shape marker, TextPointer pointer)
         {
             var rect = pointer.GetCharacterRect(LogicalDirection.Forward);
             marker.Margin = new Thickness(rect.Left, rect.Top, 0, 0);
             marker.Visibility = System.Windows.Visibility.Visible;
-            marker.Fill = pointer.LogicalDirection == LogicalDirection.Forward ? Brushes.HotPink : Brushes.Navy;
+            marker.Fill = pointer.LogicalDirection == LogicalDirection.Forward ? Brushes.HotPink : Brushes.Yellow;
         }
 
         private static void ConsoleModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -109,6 +111,7 @@ namespace Coco.Controls
 
         private void _host_PreviewKeyDown(object sender, KeyEventArgs e)
         {
+
             if (e.Key == Key.Enter || e.Key == Key.Return)
             {
                 // Get all the text since the input started
@@ -154,6 +157,12 @@ namespace Coco.Controls
             InputStart = InputStart.InsertParagraphBreak();
             InputStart.Paragraph.Margin = new Thickness(0);
             _host.CaretPosition = InputStart;
+            return TaskEx.FromCompleted();
+        }
+
+        Task IConsoleHost.Clear()
+        {
+            _host.Document = new FlowDocument();
             return TaskEx.FromCompleted();
         }
 

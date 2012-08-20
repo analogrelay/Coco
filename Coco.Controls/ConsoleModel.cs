@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Coco.Controls
 {
@@ -11,7 +12,6 @@ namespace Coco.Controls
     {
         Task Attach(IConsoleHost host);
         Task Detach(IConsoleHost host);
-        Task Resize(ConsoleDimensions dimensions);
         Task LineCommitted(string line);
     }
 
@@ -20,13 +20,13 @@ namespace Coco.Controls
         public static readonly IConsoleModel Null = new NullConsoleModel();
 
         protected IConsoleHost Host { get; private set; }
-
+        
         public abstract Task LineCommitted(string line);
-
+        
         public virtual Task Attach(IConsoleHost host)
         {
             Host = host;
-            return Task.FromResult<object>(null);
+            return TaskEx.FromCompleted();
         }
 
         public virtual Task Detach(IConsoleHost host)
@@ -41,12 +41,6 @@ namespace Coco.Controls
         private class NullConsoleModel : ConsoleModel
         {
             public override Task LineCommitted(string line) { return Task.FromResult<object>(null); }
-        }
-
-
-        public Task Resize(ConsoleDimensions dimensions)
-        {
-            throw new NotImplementedException();
         }
     }
 }

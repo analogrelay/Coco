@@ -10,6 +10,7 @@ namespace Coco.Controls
     {
         Task Write(string text);
         Task InsertLineBreak();
+        Task Clear();
     }
 
     public static class ConsoleHostExtensions

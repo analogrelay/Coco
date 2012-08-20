@@ -5,15 +5,15 @@
         xmlns:ps1="clr-namespace:Coco.PowerShell"
         xmlns:Controls="clr-namespace:Coco.Controls;assembly=Coco.Controls" 
         x:Class="Coco.MainWindow"
-        Title="MainWindow" Height="500" Width="700" WindowStyle="None" ResizeMode="NoResize">
+        Title="MainWindow" Height="500" Width="700" WindowStyle="None" ResizeMode="NoResize" FocusManager.FocusedElement="{Binding ElementName=Console}">
     <Window.Resources>
         <ps1:PowerShellConsoleModel x:Key="PowerShellConsoleModel" />
     </Window.Resources>
     <Grid>
-        <Border BorderBrush="#FF1BA1E2" BorderThickness="2">
+        <Border BorderBrush="#FF007ACC" BorderThickness="2">
             <DockPanel>
-                <StatusBar DockPanel.Dock="Bottom" Background="#FF1BA1E2" Foreground="White">C:\Windows</StatusBar>
-                <Controls:Console Model="{StaticResource PowerShellConsoleModel}" Background="{DynamicResource ConsoleBackgroundBrush}" Foreground="{DynamicResource ConsoleForegroundBrush}" FontFamily="{DynamicResource ConsoleFontFamily}" FontSize="{DynamicResource ConsoleFontSize}"/>
+                <StatusBar DockPanel.Dock="Bottom" Background="#FF007ACC" Foreground="White">C:\Windows</StatusBar>
+                <Controls:Console x:Name="Console" Model="{StaticResource PowerShellConsoleModel}" Background="{DynamicResource ConsoleBackgroundBrush}" Foreground="{DynamicResource ConsoleForegroundBrush}" FontFamily="{DynamicResource ConsoleFontFamily}" FontSize="{DynamicResource ConsoleFontSize}"/>
             </DockPanel>
         </Border>
     </Grid>
