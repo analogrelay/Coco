@@ -9,12 +9,11 @@ namespace Coco
 {
     public class EchoConsoleModel : ConsoleModel
     {
-        public override Task LineCommitted(string line)
+        public override async Task LineCommitted(string line)
         {
-            Host.InsertLineBreak();
-            Host.WriteLine("ECHO: " + line);
-            Host.Write("Input: ");
-            return Task.FromResult<object>(null);
+            await Host.InsertLineBreak();
+            await Host.WriteLine("ECHO: " + line);
+            await Host.Write("Input: ");
         }
     }
 }

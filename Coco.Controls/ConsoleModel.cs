@@ -42,5 +42,11 @@ namespace Coco.Controls
         {
             public override Task LineCommitted(string line) { return Task.FromResult<object>(null); }
         }
+
+
+        public Task Resize(ConsoleDimensions dimensions)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

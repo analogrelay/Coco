@@ -123,6 +123,14 @@ namespace Coco.Controls
                 Model.LineCommitted(committedText);
                 e.Handled = true;
             }
+            else if (e.Key == Key.Back && _host.CaretPosition.CompareTo(_inputStart) <= 0)
+            {
+                e.Handled = true;
+            }
+            else if (e.Key == Key.Delete && _host.CaretPosition.CompareTo(_inputStart) < 0)
+            {
+                e.Handled = true;
+            }
         }
 
         private void _host_PreviewTextInput(object sender, TextCompositionEventArgs e)
